@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import BioPhoto from '../assets/bio-photo.jpeg';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { GITHUB_URL, LINKEDIN_URL, SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`About | ${SITE_TITLE}`} description="About Stav Shamir" />
+		<style>
+			.bio-photo {
+				border-radius: 50%;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<Image class="bio-photo" src={BioPhoto} width={160} alt="Stav Shamir" />
+			<h1>About</h1>
+			<p>I'm Stav Shamir, a software developer based in Be'er Sheva, Israel.</p>
+			<p>
+				You can find me on <a href={GITHUB_URL}>GitHub</a> and <a href={LINKEDIN_URL}>LinkedIn</a>, or
+				email me at <a href="mailto:shamir.stav@gmail.com">shamir.stav@gmail.com</a>.
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,0 +1,187 @@
+---
+import { Image } from 'astro:assets';
+import type { MarkdownHeading } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+
+type Props = CollectionEntry<'blog'>['data'] & { headings?: MarkdownHeading[] };
+
+const { title, description, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
+
+// Only posts with a few sections get a table of contents.
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} image={heroImage} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.prose :global(img) {
+				display: block;
+				max-width: 100%;
+				height: auto;
+				margin: 1.5em auto;
+			}
+			.prose :global(img.zoomable) {
+				cursor: zoom-in;
+			}
+			.toc {
+				margin: 0 0 2em;
+				padding: 1em 1.5em;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 8px;
+				background: rgb(var(--gray-gradient-stop, 250, 250, 250));
+				font-size: 0.95em;
+			}
+			.toc strong {
+				display: block;
+				margin-bottom: 0.4em;
+			}
+			.toc ol {
+				margin: 0;
+				padding-left: 1.4em;
+			}
+			.toc li {
+				margin: 0.2em 0;
+			}
+			.prose :global(.repo-card) {
+				display: flex;
+				align-items: center;
+				gap: 1em;
+				margin: 1.5em 0;
+				padding: 1em 1.25em;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 8px;
+				color: rgb(var(--black));
+				text-decoration: none;
+				transition: box-shadow 0.15s, border-color 0.15s;
+			}
+			.prose :global(.repo-card:hover) {
+				border-color: var(--accent);
+				box-shadow: var(--box-shadow);
+			}
+			.prose :global(.repo-card svg) {
+				flex: none;
+				margin: 0;
+			}
+			.prose :global(.repo-card-text) {
+				display: flex;
+				flex-direction: column;
+				line-height: 1.3;
+			}
+			.prose :global(.repo-card-text span) {
+				color: rgb(var(--gray));
+				font-size: 0.9em;
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: rgb(var(--gray-dark));
+			}
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: rgb(var(--gray));
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="hero-image">
+					{heroImage && <Image width={1020} src={heroImage} alt="" />}
+				</div>
+				<div class="prose">
+					<div class="title">
+						<div class="date">
+							<FormattedDate date={pubDate} />
+							{
+								updatedDate && (
+									<div class="last-updated-on">
+										Last updated on <FormattedDate date={updatedDate} />
+									</div>
+								)
+							}
+						</div>
+						<h1>{title}</h1>
+						<hr />
+					</div>
+					{
+						toc.length >= 3 && (
+							<nav class="toc" aria-label="Table of contents">
+								<strong>Contents</strong>
+								<ol>
+									{toc.map((h) => (
+										<li>
+											<a href={`#${h.slug}`}>{h.text}</a>
+										</li>
+									))}
+								</ol>
+							</nav>
+						)
+					}
+					<slot />
+				</div>
+			</article>
+		</main>
+		<Footer />
+		<script>
+			// Click a `.zoomable` image to view it full size; click or Esc to close.
+			const overlay = document.createElement('div');
+			overlay.style.cssText =
+				'position:fixed;inset:0;z-index:100;display:none;overflow:auto;background:rgba(0,0,0,.85);cursor:zoom-out;padding:2rem;';
+			const zoomed = document.createElement('img');
+			zoomed.style.cssText = 'display:block;margin:0 auto;max-width:none;width:min(1640px,100%);height:auto;';
+			overlay.append(zoomed);
+			document.body.append(overlay);
+
+			const close = () => {
+				overlay.style.display = 'none';
+				document.body.style.overflow = '';
+			};
+			overlay.addEventListener('click', close);
+			document.addEventListener('keydown', (e) => e.key === 'Escape' && close());
+
+			document.querySelectorAll<HTMLImageElement>('img.zoomable').forEach((img) => {
+				img.addEventListener('click', () => {
+					zoomed.src = img.currentSrc || img.src;
+					zoomed.alt = img.alt;
+					overlay.style.display = 'block';
+					document.body.style.overflow = 'hidden';
+				});
+			});
+		</script>
+	</body>
+</html>
