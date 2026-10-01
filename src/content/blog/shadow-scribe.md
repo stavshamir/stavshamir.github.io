@@ -7,6 +7,8 @@ pubDate: 2026-09-30
 
 > **TL;DR:** For five months, I've been keeping a developer journal, now over 100 entries. Of course, I haven't written a word of it - a single skill generates it for me. The journal helps me remember what I worked on and why I made the decisions I did, gives my agents context, and unblocks my colleagues when I'm not around. The skill is [on GitHub](https://github.com/stavshamir/shadow-scribe), ready to use; the [workflow](#the-workflow) section is all you need to get started.
 
+## Motivation
+
 Every developer knows that moment: a colleague asks you "why did you build it this way?" or "where is the script you used to clean the environment last time?" The answer is frustratingly on the tip of your tongue; you are working on so many things, and you are less organized than you would like. You just don't remember.
 
 The solution was always there. The web is full of posts by those better than us, maintaining developer journals and orchestrating their second brains. I tried materializing the promise of this approach for many years, ending with a graveyard of nearly-empty Obsidian vaults and just my lonely, single brain.
