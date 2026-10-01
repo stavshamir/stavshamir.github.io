@@ -107,7 +107,13 @@ blockquote {
 	border-left: 4px solid var(--accent);
 	padding: 0 0 0 20px;
 	margin: 0;
-	font-size: 1.333em;
+}
+figure {
+	margin: 0 0 2em 0;
+}
+figcaption {
+	font-size: 0.8em;
+	color: rgb(var(--gray));
 }
 hr {
 	border: none;

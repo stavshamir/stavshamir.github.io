@@ -39,6 +39,12 @@ const toc = headings.filter((h) => h.depth === 2);
 				height: auto;
 				margin: 1.5em auto;
 			}
+			.prose :global(figure img) {
+				margin-bottom: 0.5em;
+			}
+			.prose :global(figcaption) {
+				text-align: center;
+			}
 			.prose :global(img.zoomable) {
 				cursor: zoom-in;
 			}
